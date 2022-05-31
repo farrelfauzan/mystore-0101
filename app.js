@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require ('express');
 const app = express ();
 const path = require('path');
@@ -14,9 +14,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static('../public'));
 
+const db = require("./server/models/index")
+db.client.sync()
+
+
 app.get('/', (req, res) => {
     res.render('index')
-})
+});
 
 
 app.listen(PORT, () => console.log('Server running at port', PORT));
