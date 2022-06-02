@@ -77,11 +77,22 @@ module.exports = (sequelize, Sequelize) => {
 
   const forgotPassword = async (data) => {
     try {
-      const encryptPassword = bcrypt.hashPassword(data.password);
-      await Users.update({
-        password: encryptPassword,
+      const encryptPassword = hashPassword(data.password);
+      const time = Date.now();
+      const checkUser = await Users.findOne({
         where: { email: data.email },
       });
+      if (!checkUser) {
+        return Promise.reject("Email not found !");
+      } else {
+        await Users.update(
+          {
+            password: encryptPassword,
+            updatedAt: time,
+          },
+          { where: { email: checkUser.dataValues.email } }
+        );
+      }
     } catch (error) {
       Promise.reject(error);
     }
