@@ -14,7 +14,6 @@ class LoginController {
       const logIn = await queries.login(data);
       res.status(200).json({
         title: "Login Page",
-        message: "Login success !",
         details: { token: logIn },
       });
     } catch (error) {

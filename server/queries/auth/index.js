@@ -10,38 +10,53 @@ module.exports ={
           let logIn = await query.findOne({
             where: { email: data.email },
           });
+          const resultObj = {
+            success: false,
+            message: "",
+          };
           if (!logIn) {
-            return Promise.reject("User not found !");
+            resultObj.message = "User not found !";
           } else {
             let dbPassword = logIn.dataValues.password;
             let isPasswordValid = bcrypt.compare(data.password, dbPassword);
             if (!isPasswordValid) {
-              return Promise.reject("Wrong password !");
+                resultObj.message = "Wrong password !";
             } else {
-              const log = logIn.dataValues;
-              const secret = "My Secret"
-              const result = {
-                  'token': jwt.sign(log, secret)
-              }
+                resultObj.success = true;
+                resultObj.data = logIn.dataValues;
+                const result = {
+                    'token': jwt.sign(resultObj.data, secret)
+                }
               return result
             //   return generateToken(log);
             }
           }
         } catch (error) {
-          Promise.reject(error);
+          Promise.reject({message: error});
         }
     },
 
     forgotPassword: async (data) => {
         try {
-          const encryptPassword = hashPassword(data.password);
-          await query.update({
-            password: encryptPassword,
-            where: { email: data.email },
-          });
-        } catch (error) {
-          Promise.reject(error);
-        }
+            const encryptPassword = hashPassword(data.password);
+            const time = Date.now();
+            const checkUser = await Users.findOne({
+              where: { email: data.email },
+            });
+            if (!checkUser) {
+              return Promise.reject("Email not found !");
+            } else {
+              await Users.update(
+                {
+                  password: encryptPassword,
+                  updatedAt: time,
+                },
+                { where: { email: checkUser.dataValues.email } }
+              );
+            }
+          } catch (error) {
+            return Promise.reject({ message: error });
+          }
     },
 
     authenticateToken: (token) => {
