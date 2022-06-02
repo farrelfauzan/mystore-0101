@@ -1,18 +1,37 @@
-const { Users, Biodata } = require("../../models")
-
+const db = require("../../models");
+const utility = require("../../utility");
+const query = db.users;
 
 module.exports = {
     getAllUser: async () => {
-        const userAttributes = ["user_id", "username","email"]
+        try {
+            const userAttributes = ["user_id", "username","email"]
+    
+            return await query.findAll({
+                attributes: userAttributes,
+                // include:[
+                //     {
+                //         model: Biodata,
+                //         attributes: ['address']
+                //     }
+                // ]
+            })
+            
+        } catch (error) {
+            throw error
+        }
+    },
 
-        return await Users.findAll({
-            attributes: userAttributes,
-            include:[
-                {
-                    model: Biodata,
-                    attributes: ['address']
-                }
-            ]
-        })
+    createUser: async (data) => {
+        const hashedPass = utility.hashPassword(data.password)
+        try {
+            await query.create({
+                username: data.username,
+                email: data.email,
+                password: hashedPass
+            })
+        } catch (error) {
+            throw error
+        }
     }
 }
