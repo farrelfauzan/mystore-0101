@@ -55,23 +55,29 @@ module.exports = (sequelize, Sequelize) => {
 
   const login = async (data) => {
     try {
-      let logIn = await Users.findOne({
+      const logIn = await Users.findOne({
         where: { email: data.email },
       });
+      const resultObj = {
+        success: false,
+        message: "",
+      };
       if (!logIn) {
-        return Promise.reject("User not found !");
+        resultObj.message = "User not found !";
       } else {
         let dbPassword = logIn.dataValues.password;
         let isPasswordValid = comparePassword(data.password, dbPassword);
         if (!isPasswordValid) {
-          return Promise.reject("Wrong password !");
+          resultObj.message = "Wrong password !";
         } else {
-          const log = logIn.dataValues;
-          return generateToken(log);
+          resultObj.success = true;
+          resultObj.data = logIn.dataValues;
+          return generateToken(resultObj.data);
         }
       }
+      return Promise.resolve(resultObj);
     } catch (error) {
-      Promise.reject(error);
+      return Promise.reject({ message: error });
     }
   };
 
@@ -94,9 +100,9 @@ module.exports = (sequelize, Sequelize) => {
         );
       }
     } catch (error) {
-      Promise.reject(error);
+      return Promise.reject({ message: error });
     }
   };
 
-  return { Users, authenticateToken, register, login, forgotPassword };
+  return { Users, authenticateToken, login, forgotPassword };
 };
