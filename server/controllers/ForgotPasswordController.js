@@ -1,5 +1,4 @@
-const db = require("../models");
-const Users = db.users;
+const queries = require("../queries/auth");
 
 class ForgotPasswordController {
   static GetForgotPassword(req, res) {
@@ -15,7 +14,7 @@ class ForgotPasswordController {
   static async PostForgotPassword(req, res) {
     try {
       const data = req.body;
-      await Users.forgotPassword(data);
+      await queries.forgotPassword(data);
       res.status(200).json({
         title: "Forgot Password Page",
         message: "Success updated password !",
