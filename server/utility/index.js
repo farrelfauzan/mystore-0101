@@ -1,10 +1,10 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 class utility {
-    static hashPassword (password) {
-        let hashPwd = bcrypt.hashSync(password, 10);
-        return hashPwd;
-    }
+  static hashPassword(password) {
+    let hashPwd = bcrypt.hashSync(password, 10);
+    return hashPwd;
+  }
 }
 
-module.exports = utility
+module.exports = utility;
