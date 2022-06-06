@@ -1,41 +1,17 @@
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../../models");
 const query = db.users;
+// const queryBiodata = db.biodata;
 const { hashPassword } = require("../../utility");
 
 module.exports = {
   login: async (data) => {
     try {
-      let logIn = await query.findOne({
+      const user = await query.findOne({
         where: { email: data.email },
       });
-      const resultObj = {
-        success: false,
-        message: "",
-      };
-      if (!logIn) {
-        return (resultObj.message = "User not found !");
-      } else {
-        let dbPassword = logIn.dataValues.password;
-        let isPasswordValid = bcrypt.compareSync(data.password, dbPassword);
-        console.log(isPasswordValid);
-        if (!isPasswordValid) {
-          return (resultObj.message = "Wrong password !");
-        } else {
-          resultObj.success = true;
-          const secret = "MySecret";
-          const payload = {
-            user_id: logIn.dataValues.user_id,
-            username: logIn.dataValues.username,
-            email: logIn.dataValues.email,
-          };
-          resultObj.data = payload;
-          const result = jwt.sign(resultObj.data, secret);
-
-          return result;
-        }
-      }
+      return user;
     } catch (error) {
       return Promise.reject({ message: error });
     }
@@ -49,7 +25,7 @@ module.exports = {
         where: { email: data.email },
       });
       if (!checkUser) {
-        return Promise.reject("Email not found !");
+        return Promise.reject("User not found !");
       } else {
         if (data.password === "") {
           return Promise.reject("Password must be filled !");
