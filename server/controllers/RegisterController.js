@@ -1,8 +1,7 @@
 const queries = require("../queries/auth");
-const utility = require("../utility");
 const db = require("../models");
-const Biodata = db.biodata;
-const User = db.users;
+
+
 
 class RegisterController {
   static GetRegister(req, res) {
@@ -14,7 +13,7 @@ class RegisterController {
 
   static async PostRegister(req, res) {
     try {
-      const { username, email, password, password2 } = req.body;
+      const { username, email, password, password2, gender, address } = req.body;
 
       if (!email) {
         return res.status(400).send({
@@ -38,32 +37,26 @@ class RegisterController {
         });
       }
 
-      const emailExist = await User.findOne({
-        where: {
-          email: email,
-        },
-      });
-
-      if (emailExist) {
+const dataUser= {email:email, password:password, username:username, gender:gender, address:address}      
+const dataEmailExist = await queries.emailExist(email)
+      
+      if (dataEmailExist) {
+        console.log("ini dataemail", dataEmailExist)
         return res.status(422).json({
           message: "Email already exist",
         });
       }
-      const newUser = {
-        username: username,
-        email: email,
-        password: utility.hashPassword(password),
-      };
-      const data = await User.create(newUser);
-      await Biodata.create({
-        gender: req.body.gender,
-        address: req.body.address,
-        user_id: data.user_id,
-      });
-      res.status(200).json({
-        success: true,
-        message: "Registration successful",
-      });
+
+      const regist=  queries.register(dataUser)
+
+      if(regist){
+        res.status(200).json({
+            success: true,
+            message: "Registration successful",
+          });
+
+      }
+
     } catch (error) {
       console.log(error);
     }
