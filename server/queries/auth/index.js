@@ -219,42 +219,4 @@ module.exports = {
     const data = jwt.verify(token, secret);
     return data;
   },
-
-  emailExist: async(data)=>{ 
-      const emailExist = await query.findOne({
-        where: {email: data}
-      }); 
-      
-      if(emailExist){
-        return true;
-      }else{
-        return false;
-      }
-    },
-  
-  register: async (userData) =>{ 
-try{
-      const newUser = {
-        username: userData.username,
-        email: userData.email,
-        password: utility.hashPassword(userData.password),
-      };
-      const data = await query.create(newUser);
-      const dataBIodata= await queryBiodata.create({
-        gender: userData.gender,
-        address: userData.address,
-        user_id: data.user_id,
-      });
-  
-     if(dataBIodata){
-      return true
-     }
-            
-    } 
-    catch (error){
-      console.log(error)
-    }
-    
-    
-  }
 };
