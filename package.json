@@ -1,7 +1,6 @@
 {
   "name": "ecommerce-mystore-data",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
@@ -19,5 +18,15 @@
     "nodemon": "^2.0.16",
     "pg": "^8.7.3",
     "sequelize": "^6.20.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/farrelfauzan/ecommerce-mystore-data.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/farrelfauzan/ecommerce-mystore-data/issues"
+  },
+  "homepage": "https://gitlab.com/farrelfauzan/ecommerce-mystore-data#readme",
+  "description": ""
 }

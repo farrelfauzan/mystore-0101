@@ -1,5 +1,4 @@
-const db = require("../models");
-const Users = db.users;
+const queries = require("../queries/auth");
 
 function tokenAuthorization(req, res, next) {
   const getToken = req.headers.authorization;
@@ -8,8 +7,8 @@ function tokenAuthorization(req, res, next) {
       message: "Need token to process, please login !",
     });
   } else {
-    let data = Users.authenticateToken(getToken);
-    req.dataUsers = data;
+    let data = queries.authenticateToken(getToken);
+    req.dataUser = data;
     next();
   }
 }
