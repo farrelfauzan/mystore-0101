@@ -4,6 +4,7 @@ const loginRouter = require("./login");
 const registerRouter = require("./register");
 const userRouter = require("./userRouter");
 const forgotPasswordRouter = require("./forgotPassword");
+const productRouter = require("./product");
 
 const { TokenAuthorization } = require("../middleware/");
 
@@ -14,5 +15,6 @@ router.use(registerRouter);
 router.use(forgotPasswordRouter);
 router.use(userRouter);
 router.use(TokenAuthorization);
+router.use(productRouter);
 
 module.exports = router;

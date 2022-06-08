@@ -1,15 +1,11 @@
 const queries = require("../queries/auth");
 
 class RegisterController {
-  static GetRegister(req, res) {
-    try {
-      res.status(200).json({
-        title: "Register Page",
-        message: "Please register first . . .",
-      });
-    } catch (error) {
-      res.status(500).json({ message: error });
-    }
+  static async GetRegister(_, res) {
+    res.status(200).json({
+      title: "Register Page",
+      message: "Please register first . . .",
+    });
   }
 
   static async PostRegister(req, res) {

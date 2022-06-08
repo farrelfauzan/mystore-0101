@@ -7,10 +7,14 @@ class Middleware {
       res.status(401).json({
         message: "Need token to process, please login !",
       });
-    } else {
-      let data = queries.authenticateToken(getToken);
-      req.dataUser = data;
+    } else if (getToken.length > 200 && getToken.includes("eyJhbGciOi")) {
+      // let data = queries.authenticateToken(getToken);
+      // req.dataUser = data;
       next();
+    } else {
+      res.status(401).json({
+        message: "Need token to process, please login !",
+      });
     }
   }
 }
