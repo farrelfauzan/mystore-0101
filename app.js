@@ -1,18 +1,18 @@
-require('dotenv').config()
-const express = require ('express');
-const app = express ();
-const path = require('path');
-const cors = require ('cors');
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const cors = require("cors");
 const PORT = process.env.PORT || 8081;
 
+const router = require("./server/routes/index");
+
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
+const db = require("./server/models/index");
+db.client.sync();
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(express.static('../public'));
+app.use(router);
 
-
-app.listen(PORT, () => console.log('Server running at port', PORT));
+app.listen(PORT, () => console.log("Server running at port", PORT));
