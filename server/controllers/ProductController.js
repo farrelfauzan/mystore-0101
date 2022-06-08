@@ -1,17 +1,14 @@
 const queries = require("../queries/product");
 
-class productController {
-  static async allProduct(req, res) {
+class ProductController {
+  static async GetProduct(_, res) {
     try {
-      const result = await queries.getAllProduct();
-      res.status(200).json(result);
+      const data = await queries.getAllProducts();
+      res.status(200).send({ product: data });
     } catch (error) {
-      res.status(500).json({
-        message: "Internal Server Error",
-        error,
-      });
+      return error;
     }
   }
 }
 
-module.exports = productController;
+module.exports = ProductController;

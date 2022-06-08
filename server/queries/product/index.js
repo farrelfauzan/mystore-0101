@@ -1,9 +1,8 @@
 const db = require("../../models");
-const utility = require("../../utility");
-const query = db.products;
+const queryProduct = db.products;
 
 module.exports = {
-  getAllProduct: async () => {
+  getAllProducts: async () => {
     try {
       const productAttributes = [
         "product_id",
@@ -13,31 +12,12 @@ module.exports = {
         "description",
         "price",
       ];
-
-      return await query.findAll({
+      const data = await queryProduct.findAll({
         attributes: productAttributes,
-        // include:[
-        //     {
-        //         model: Biodata,
-        //         attributes: ['address']
-        //     }
-        // ]
       });
+      return data;
     } catch (error) {
-      throw error;
+      return Promise.reject(error);
     }
   },
-
-  //   createUser: async (data) => {
-  //     const hashedPass = utility.hashPassword(data.password);
-  //     try {
-  //       await query.create({
-  //         username: data.username,
-  //         email: data.email,
-  //         password: hashedPass,
-  //       });
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   },
 };
