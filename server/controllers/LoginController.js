@@ -30,7 +30,9 @@ class LoginController {
         return null;
       }
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
     }
   }
 }
