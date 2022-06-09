@@ -14,7 +14,7 @@ router.use(loginRouter);
 router.use(registerRouter);
 router.use(forgotPasswordRouter);
 router.use(userRouter);
-router.use(TokenAuthorization);
+// router.use(TokenAuthorization);
 router.use(productRouter);
 
 module.exports = router;
