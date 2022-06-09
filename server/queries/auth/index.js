@@ -44,6 +44,7 @@ module.exports = {
                 user_id: user.dataValues.user_id,
                 username: user.dataValues.username,
                 email: user.dataValues.email,
+                role: user.dataValues.role,
                 gender: userBiodata.dataValues.gender,
                 address: userBiodata.dataValues.address,
               };
@@ -79,6 +80,7 @@ module.exports = {
       data.email === "" ||
       data.password === "" ||
       data.gender === "" ||
+      data.role === "" ||
       data.address === ""
     ) {
       objError.status = 400;
@@ -119,6 +121,7 @@ module.exports = {
                 const createUser = await query.create({
                   username: data.username,
                   email: data.email,
+                  role: data.role,
                   password: encryptPassword,
                 });
                 await queryBiodata.create({

@@ -17,6 +17,18 @@ class Middleware {
       });
     }
   }
+
+  static AdminAuthorization(req, res, next) {
+    const getToken = req.headers.authorization;
+    let data = queries.authenticateToken(getToken);
+    if (data.role === "admin") {
+      next();
+    } else {
+      res.status(401).json({
+        message: "Only admin can access this page !",
+      });
+    }
+  }
 }
 
 module.exports = Middleware;
