@@ -1,4 +1,5 @@
 const { upload } = require("../../helper/upload");
+const { bucketFirebase } = require("../../firebase");
 const db = require("../../models");
 const queryProduct = db.products;
 
@@ -8,30 +9,34 @@ module.exports = {
     const data = await queryProduct.findAll({
       attributes: productAttributes,
     });
-    console.log(data);
     return data;
   },
 
-  createProduct: async () => {
-    const data = req.body;
-    let product = await queryProduct.create({
-      name: data.name,
-      category: data.category,
-      description: data.description,
-      price: data.price,
-    });
-
-    return product;
-  },
-
-  uploadIUmage: async () => {
-    const { path, originalname } = req.file;
-    let link = await upload({
-      bucketfirebase,
-      filename: originalname,
+  createProduct: async (dataBody, dataUpload) => {
+    const { path } = dataUpload;
+    const objData = {};
+    const link = await upload({
+      bucketFirebase,
+      filename: dataUpload.filename,
       path,
     });
-
-    return link;
+    if (link) {
+      const product = await queryProduct.create({
+        name: dataBody.name,
+        category: dataBody.category,
+        imageUrl: link,
+        description: dataBody.description,
+        price: dataBody.price,
+      });
+      objData.dataProduct = {
+        product_id: product.dataValues.product_id,
+        name: product.dataValues.name,
+        category: product.dataValues.category,
+        imageUrl: product.dataValues.imageUrl,
+        description: product.dataValues.description,
+        price: product.dataValues.price,
+      };
+      return objData.dataProduct;
+    }
   },
 };
