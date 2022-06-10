@@ -1,6 +1,5 @@
 const queries = require("../queries/product");
-const db = require("../models");
-const queryProduct = db.products;
+
 class ProductController {
   static async GetProduct(_, res) {
     try {
@@ -11,26 +10,20 @@ class ProductController {
     }
   }
 
-  static async createProduct (req, res) {
+  static async createProduct(req, res) {
     try {
-      const upload = await queries.uploadIUmage()
-      const result = await queryProduct.create({
-        name: data.name,
-        category: data.category,
-        imageUrl: upload,
-        description: data.description,
-        price: data.price
-      })
-
+      const dataUpload = req.file;
+      const dataBody = req.body;
+      const result = await queries.createProduct(dataBody, dataUpload);
       res.status(201).json({
-        message: "Success create product",
-        result
-      })
+        message: "Success create product !",
+        result,
+      });
     } catch (error) {
       res.status(500).json({
         message: "Internal Server Error",
-        error
-      })
+        error,
+      });
     }
   }
 }
