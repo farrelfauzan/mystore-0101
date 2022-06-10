@@ -7,7 +7,7 @@ const forgotPasswordRouter = require("./forgotPassword");
 const productRouter = require("./product");
 const adminRouter = require("./admin");
 
-// const { TokenAuthorization, AdminAuthorization } = require("../middleware/");
+const { TokenAuthorization, AdminAuthorization } = require("../middleware/");
 
 const router = express.Router();
 
@@ -15,9 +15,9 @@ router.use(loginRouter);
 router.use(registerRouter);
 router.use(forgotPasswordRouter);
 router.use(userRouter);
-// router.use(TokenAuthorization);
+router.use(TokenAuthorization);
 router.use(productRouter);
-// router.use(AdminAuthorization);
+router.use(AdminAuthorization);
 router.use(adminRouter);
 
 module.exports = router;
