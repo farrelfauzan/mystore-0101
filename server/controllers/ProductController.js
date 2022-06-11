@@ -26,6 +26,22 @@ class ProductController {
       });
     }
   }
+
+  static async deleteProduct(req, res) {
+    try {
+      const dataBody = req.body;
+      const result = await queries.deleteProduct(dataBody);
+      res.status(201).json({
+        message: "Success delete product!",
+        result,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        error,
+      });
+    }
+  }
 }
 
 module.exports = ProductController;

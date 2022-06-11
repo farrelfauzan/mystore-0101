@@ -6,9 +6,16 @@ const queryProduct = db.products;
 module.exports = {
   getAllProducts: async () => {
     const productAttributes = ["product_id", "name", "imageUrl", "category", "description", "price"];
-    const data = await queryProduct.findAll({
-      attributes: productAttributes,
-    });
+    const data = await queryProduct.findAll(
+      {
+        where: {
+          deletedAt: null,
+        },
+      },
+      {
+        attributes: productAttributes,
+      }
+    );
     return data;
   },
 
@@ -37,6 +44,26 @@ module.exports = {
         price: product.dataValues.price,
       };
       return objData.dataProduct;
+    }
+  },
+
+  deleteProduct: async (dataBody) => {
+    const productId = dataBody.product_id;
+    const data = await queryProduct.findOne({
+      productId: productId,
+    });
+    if (data) {
+      const softDelete = await queryProduct.update(
+        {
+          deletedAt: Date.now(),
+        },
+        {
+          where: {
+            product_id: productId,
+          },
+        }
+      );
+      return softDelete;
     }
   },
 };
