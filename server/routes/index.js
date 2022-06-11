@@ -15,8 +15,8 @@ router.use(loginRouter);
 router.use(registerRouter);
 router.use(forgotPasswordRouter);
 router.use(userRouter);
-router.use(TokenAuthorization);
 router.use(productRouter);
+router.use(TokenAuthorization);
 router.use(AdminAuthorization);
 router.use(adminRouter);
 
