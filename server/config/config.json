@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "postgre",
+    "password": "daendels123",
     "database": "myStore",
     "host": "127.0.0.1",
     "port": 5432,
