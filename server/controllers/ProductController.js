@@ -14,9 +14,28 @@ class ProductController {
     try {
       const dataUpload = req.file;
       const dataBody = req.body;
+
       const result = await queries.createProduct(dataBody, dataUpload);
       res.status(201).json({
         message: "Success create product !",
+        result,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal Server Error",
+        error,
+      });
+    }
+  }
+
+  static async editProduct(req, res) {
+    try {
+      // const dataUpload = req.file;
+      const dataBody = req.body;
+      // console.log("ini databody update: ", dataBody);
+      const result = await queries.editProduct(dataBody);
+      res.status(201).json({
+        message: "Success change product !",
         result,
       });
     } catch (error) {

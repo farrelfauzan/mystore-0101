@@ -6,16 +6,12 @@ const queryProduct = db.products;
 module.exports = {
   getAllProducts: async () => {
     const productAttributes = ["product_id", "name", "imageUrl", "category", "description", "price"];
-    const data = await queryProduct.findAll(
-      {
-        where: {
-          deletedAt: null,
-        },
-      },
-      {
-        attributes: productAttributes,
-      }
-    );
+    const query = {
+      where: { deletedAt: null },
+    };
+    const data = await queryProduct.findAll(query, {
+      attributes: productAttributes,
+    });
     return data;
   },
 
@@ -47,21 +43,66 @@ module.exports = {
     }
   },
 
+  editProduct: async (dataBody) => {
+    // const { path } = dataUpload;
+    const productId = dataBody.product_id;
+    const query = {
+      where: { product_id: productId },
+    };
+
+    const objData = {};
+
+    // const link = await upload({
+    //   bucketFirebase,
+    //   filename: dataUpload.filename,
+    //   path,
+    // });
+
+    const data = await queryProduct.findOne({
+      product_id: productId,
+    });
+
+    if (data) {
+      const editProduct = await queryProduct.update(
+        {
+          product_id: productId,
+          name: dataBody.name,
+          category: dataBody.category,
+          // imageUrl: link,
+          description: dataBody.description,
+          price: dataBody.price,
+        },
+        query
+      );
+      objData = {
+        product_id: editProduct.dataValues.product_id,
+        name: editProduct.dataValues.name,
+        category: editProduct.dataValues.category,
+        // imageUrl: product.dataValues.imageUrl,
+        description: editProduct.dataValues.description,
+        price: editProduct.dataValues.price,
+      };
+
+      console.log(editProduct);
+      console.log(productId);
+      return objData.dataProduct;
+    }
+  },
+
   deleteProduct: async (dataBody) => {
     const productId = dataBody.product_id;
+    const query = {
+      where: { product_id: productId },
+    };
     const data = await queryProduct.findOne({
-      productId: productId,
+      product_id: productId,
     });
     if (data) {
       const softDelete = await queryProduct.update(
         {
           deletedAt: Date.now(),
         },
-        {
-          where: {
-            product_id: productId,
-          },
-        }
+        query
       );
       return softDelete;
     }
