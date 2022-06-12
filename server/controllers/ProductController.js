@@ -30,9 +30,8 @@ class ProductController {
 
   static async editProduct(req, res) {
     try {
-      // const dataUpload = req.file;
       const dataBody = req.body;
-      // console.log("ini databody update: ", dataBody);
+
       const result = await queries.editProduct(dataBody);
       res.status(201).json({
         message: "Success change product !",

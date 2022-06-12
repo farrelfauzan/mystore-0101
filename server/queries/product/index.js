@@ -8,6 +8,7 @@ module.exports = {
     const productAttributes = ["product_id", "name", "imageUrl", "category", "description", "price"];
     const query = {
       where: { deletedAt: null },
+      order: [["updatedAt", "DESC"]],
     };
     const data = await queryProduct.findAll(query, {
       attributes: productAttributes,
@@ -44,20 +45,10 @@ module.exports = {
   },
 
   editProduct: async (dataBody) => {
-    // const { path } = dataUpload;
     const productId = dataBody.product_id;
     const query = {
       where: { product_id: productId },
     };
-
-    const objData = {};
-
-    // const link = await upload({
-    //   bucketFirebase,
-    //   filename: dataUpload.filename,
-    //   path,
-    // });
-
     const data = await queryProduct.findOne({
       product_id: productId,
     });
@@ -65,27 +56,14 @@ module.exports = {
     if (data) {
       const editProduct = await queryProduct.update(
         {
-          product_id: productId,
           name: dataBody.name,
           category: dataBody.category,
-          // imageUrl: link,
           description: dataBody.description,
           price: dataBody.price,
         },
         query
       );
-      objData = {
-        product_id: editProduct.dataValues.product_id,
-        name: editProduct.dataValues.name,
-        category: editProduct.dataValues.category,
-        // imageUrl: product.dataValues.imageUrl,
-        description: editProduct.dataValues.description,
-        price: editProduct.dataValues.price,
-      };
-
-      console.log(editProduct);
-      console.log(productId);
-      return objData.dataProduct;
+      return editProduct;
     }
   },
 

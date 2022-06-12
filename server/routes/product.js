@@ -8,8 +8,8 @@ productController.route("/store").get(ProductController.GetProduct);
 
 productController.route("/createProduct").post(multerSetup.single("imageUrl"), ProductController.createProduct);
 
-productController.route("/editProduct").post(ProductController.editProduct);
-
 productController.route("/deleteProduct").post(ProductController.deleteProduct);
+
+productController.route("/editProduct").post(ProductController.editProduct);
 
 module.exports = productController;
