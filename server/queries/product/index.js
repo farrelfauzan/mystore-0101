@@ -5,15 +5,12 @@ const queryProduct = db.products;
 
 module.exports = {
   getAllProducts: async () => {
-    const productAttributes = [
-      "product_id",
-      "name",
-      "imageUrl",
-      "category",
-      "description",
-      "price",
-    ];
-    const data = await queryProduct.findAll({
+    const productAttributes = ["product_id", "name", "imageUrl", "category", "description", "price"];
+    const query = {
+      where: { deletedAt: null },
+      order: [["updatedAt", "DESC"]],
+    };
+    const data = await queryProduct.findAll(query, {
       attributes: productAttributes,
     });
     return data;
@@ -44,6 +41,48 @@ module.exports = {
         price: product.dataValues.price,
       };
       return objData.dataProduct;
+    }
+  },
+
+  editProduct: async (dataBody) => {
+    const productId = dataBody.product_id;
+    const query = {
+      where: { product_id: productId },
+    };
+    const data = await queryProduct.findOne({
+      product_id: productId,
+    });
+
+    if (data) {
+      const editProduct = await queryProduct.update(
+        {
+          name: dataBody.name,
+          category: dataBody.category,
+          description: dataBody.description,
+          price: dataBody.price,
+        },
+        query
+      );
+      return editProduct;
+    }
+  },
+
+  deleteProduct: async (dataBody) => {
+    const productId = dataBody.product_id;
+    const query = {
+      where: { product_id: productId },
+    };
+    const data = await queryProduct.findOne({
+      product_id: productId,
+    });
+    if (data) {
+      const softDelete = await queryProduct.update(
+        {
+          deletedAt: Date.now(),
+        },
+        query
+      );
+      return softDelete;
     }
   },
 };
